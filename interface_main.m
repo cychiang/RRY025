@@ -1,1 +1,2 @@
-% image_function
+% interface of image_enhancement.m
+
