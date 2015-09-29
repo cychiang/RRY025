@@ -6,20 +6,28 @@ classdef image_enhancement
     %       - Yu-Han Wei:       ims20591(at)gmail(dot)com 
     
     properties
-        rows % rows of input
-        cols % cols of input
-        area % area of input
-        mean % Global mean m = sum[f(x,y)]/MN, x=0~M-1, y=0~N-1
+        rows        % rows of input
+        cols        % cols of input
+        area        % area of input
+        mean        % Global mean
+        variance    % Global variance
+        ehancement_constant
+                    % Ehancement constant
+        k0          % k0, mean threshold
+        k1          % k1, variance threshold
+        k2          % k2, variance threshold
+        elem_constract
     end
     
     methods
-        function enhanced = image_enhancement_from_mat(obj, input)
+        function enhanced = local_image_enhancement(obj, input, constant, threshold)
             [obj.rows, obj.cols] = size(input);
-            [obj.area] = [obj.rows] * [obj.cols];
-            [obj.mean] = sum(input(:))./ [obj.area];
+            [obj.mean] = mean2(input);
+            [obj.variance] = std2(input);
+            [obj.ehancement_constant] = constant;
+            [obj.k0, obj.k1, obj.k2] = threshold(:);
             enhanced = [obj.mean];  % To be done
         end
     end
-    
 end
 
