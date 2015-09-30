@@ -22,7 +22,7 @@ function varargout = ui_interface(varargin)
 
 % Edit the above text to modify the response to help ui_interface
 
-% Last Modified by GUIDE v2.5 30-Sep-2015 08:36:02
+% Last Modified by GUIDE v2.5 30-Sep-2015 22:13:50
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -78,28 +78,42 @@ function load_image_Callback(hObject, eventdata, handles)
 % hObject    handle to load_image (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+[fileName, pathName] = uigetfile({'*.mat'}, 'File Selector');
+fullPathName = strcat(pathName, fileName);
+mat=load(fullPathName);
+image=mat.forestgray;
+handles.image=image;
+guidata(hObject, handles);
 
 % --- Executes on button press in processing_image.
 function processing_image_Callback(hObject, eventdata, handles)
 % hObject    handle to processing_image (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+image=handles.image;
+% Get Data from text
+e = str2num(get(handles.ehancement_constant,'String'));
+k0 = str2double(get(handles.k0,'String'));
+k1 = str2double(get(handles.k1,'String'));
+k2 = str2double(get(handles.k2,'String'));
+mask = str2num(get(handles.mask,'String'));
+m_class = image_enhancement;
+out = m_class.local_image_enhancement(handles.image, e, k0, k1, k2, mask);
+pairOfImages = [image, out];
+figure, imshow(pairOfImages);
 
-
-
-function edit1_Callback(hObject, eventdata, handles)
-% hObject    handle to edit1 (see GCBO)
+function ehancement_constant_Callback(hObject, eventdata, handles)
+% hObject    handle to ehancement_constant (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit1 as text
-%        str2double(get(hObject,'String')) returns contents of edit1 as a double
+% Hints: get(hObject,'String') returns contents of ehancement_constant as text
+%        str2double(get(hObject,'String')) returns contents of ehancement_constant as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit1_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit1 (see GCBO)
+function ehancement_constant_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to ehancement_constant (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -111,18 +125,18 @@ end
 
 
 
-function edit2_Callback(hObject, eventdata, handles)
-% hObject    handle to edit2 (see GCBO)
+function k0_Callback(hObject, eventdata, handles)
+% hObject    handle to k0 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit2 as text
-%        str2double(get(hObject,'String')) returns contents of edit2 as a double
+% Hints: get(hObject,'String') returns contents of k0 as text
+%        str2double(get(hObject,'String')) returns contents of k0 as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit2_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit2 (see GCBO)
+function k0_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to k0 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -134,18 +148,18 @@ end
 
 
 
-function edit3_Callback(hObject, eventdata, handles)
-% hObject    handle to edit3 (see GCBO)
+function k1_Callback(hObject, eventdata, handles)
+% hObject    handle to k1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit3 as text
-%        str2double(get(hObject,'String')) returns contents of edit3 as a double
+% Hints: get(hObject,'String') returns contents of k1 as text
+%        str2double(get(hObject,'String')) returns contents of k1 as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit3_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit3 (see GCBO)
+function k1_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to k1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -157,18 +171,41 @@ end
 
 
 
-function edit4_Callback(hObject, eventdata, handles)
-% hObject    handle to edit4 (see GCBO)
+function k2_Callback(hObject, eventdata, handles)
+% hObject    handle to k2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit4 as text
-%        str2double(get(hObject,'String')) returns contents of edit4 as a double
+% Hints: get(hObject,'String') returns contents of k2 as text
+%        str2double(get(hObject,'String')) returns contents of k2 as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit4_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit4 (see GCBO)
+function k2_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to k2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function mask_Callback(hObject, eventdata, handles)
+% hObject    handle to mask (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of mask as text
+%        str2double(get(hObject,'String')) returns contents of mask as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function mask_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to mask (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
