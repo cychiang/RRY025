@@ -23,13 +23,16 @@ classdef image_enhancement
     
     methods
         function enhanced = local_image_enhancement(obj, input, constant, ...
-                threshold, mask)
+                k0, k1, k2, mask)
             [obj.rows, obj.cols] = size(input);
             [obj.mean] = mean2(input);
             [obj.variance] = std2(input);
             [obj.ehancement_constant] = constant;
-            [obj.k0, obj.k1, obj.k2] = threshold(:);
+            [obj.k0] = k0;
+            [obj.k1] = k1;
+            [obj.k2] = k2;
             [obj.mask] = (mask - 1) / 2;
+            enhanced = zeros(obj.rows, obj.cols);
             % Zero Padding
             [obj.image] = padarray(input, [1, 1], 'both');
             % Main Loop
@@ -41,11 +44,24 @@ classdef image_enhancement
                         col - obj.mask:col + obj.mask);
                     % local mean
                     local_mean = mean2(obj.sub_image);
-                    
+                    % different elements in a mask
+                    different_elements = unique([obj.sub_image]);
+                    % probability of different elements in a mask
+                    probabilities = histcounts([obj.sub_image], ... 
+                        numel(different_elements)) ./ (numel([obj.sub_image]));
+                    % Ds=sqrt(Vs), local variance Vs = sum[(r(i)-Ms)^2*p(r(i))], i=0~L-1
+                    Ds = sqrt(sum((different_elements' - local_mean) ...
+                        .^2.*probabilities));
+                    % 
+                    if local_mean <= [obj.k0] * [obj.mean] && ...
+                            Ds >= [obj.k1] * [obj.variance] && ...
+                            Ds <= [obj.k2] * [obj.variance]
+                        
+                        enhanced(row - 1, col - 1) = obj.ehancement_constant * ...
+                            obj.image(row, col);
+                    end
                 end 
             end
-            % 
-            enhanced = [obj.image];
         end
     end
 end
