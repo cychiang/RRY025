@@ -16,17 +16,26 @@ classdef image_enhancement
         k0          % k0, mean threshold
         k1          % k1, variance threshold
         k2          % k2, variance threshold
-        elem_constract
+        image       % Zero padding from input image
     end
     
     methods
-        function enhanced = local_image_enhancement(obj, input, constant, threshold)
+        function enhanced = local_image_enhancement(obj, input, constant)%, threshold)
             [obj.rows, obj.cols] = size(input);
             [obj.mean] = mean2(input);
             [obj.variance] = std2(input);
             [obj.ehancement_constant] = constant;
-            [obj.k0, obj.k1, obj.k2] = threshold(:);
-            enhanced = [obj.mean];  % To be done
+%             [obj.k0, obj.k1, obj.k2] = threshold(:);
+            % Zero Padding
+            [obj.image] = padarray(input, [1, 1], 'both');
+            % Main Loop
+%             for row = 1 : obj.rows
+%                 for col = 1 : obj.cols
+%                     
+%                 end 
+%             end
+            % 
+            enhanced = [obj.image];
         end
     end
 end
