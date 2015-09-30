@@ -1,0 +1,2 @@
+# ignore matlab *.m~ files
+*.m~
