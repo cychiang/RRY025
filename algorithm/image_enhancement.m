@@ -35,8 +35,8 @@ classdef image_enhancement
             % Zero Padding
             [obj.image] = padarray(input, [1, 1], 'both');
             % Main Loop
-            for row = 2 : obj.rows + 1
-                for col = 2 : obj.cols + 1
+            for row = 1 + mask : obj.rows + 2 - mask
+                for col = 1 + mask : obj.cols + 2 -mask
                     % mask should be odd number
                     [obj.sub_image] = ... 
                         obj.image(row - obj.mask : row + obj.mask, ...
