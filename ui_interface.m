@@ -81,8 +81,10 @@ function load_image_Callback(hObject, eventdata, handles)
 [fileName, pathName] = uigetfile({'*.mat'}, 'File Selector');
 fullPathName = strcat(pathName, fileName);
 mat=load(fullPathName);
-image=mat.forestgray;
-handles.image=image;
+% forest_from_mat=mat.forestgray;
+% image = fix(forest_from_mat .* 255);
+image = mat.forestgray;
+handles.image = image;
 guidata(hObject, handles);
 
 % --- Executes on button press in processing_image.
@@ -97,9 +99,12 @@ k0 = str2double(get(handles.k0,'String'));
 k1 = str2double(get(handles.k1,'String'));
 k2 = str2double(get(handles.k2,'String'));
 mask = str2num(get(handles.mask,'String'));
-m_class = image_enhancement;
-out = m_class.local_image_enhancement(handles.image, e, k0, k1, k2, mask);
-pairOfImages = [image, out];
+% m_class = image_enhancement;
+% out = m_class.local_image_enhancement(handles.image, e, k0, k1, k2, mask);
+out = image_enhancement2(handles.image, e, k0, k1, k2, mask);
+global_image = histeq(handles.image);
+pairOfImages = [image, global_image, out];
+
 figure, imshow(pairOfImages);
 
 function ehancement_constant_Callback(hObject, eventdata, handles)

@@ -1,2 +1,6 @@
+# ignore folder
+/reports
+/results
+
 # ignore matlab *.m~ files
 *.m~
