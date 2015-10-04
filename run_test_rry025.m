@@ -27,15 +27,14 @@ for mask = 3:2:9
                 % k2 from 0.1 ~ 1 with step 0.1
                 for k2 = 0.1 : 0.2 : 1
                     id = id + 1;
-                    out = [e, k0, k1, k2, id];
+                    data = [e, k0, k1, k2, id];
+                    % process image.
+                    image = image_enhancement2(image, e, k0, k1, k2, mask);
                     % print message
                     disp(id);
                     disp(data);
-                    disp(fileName);
-                    disp(imageName);
-                    % process image.
                     imageName = sprintf('results/mask_%d/%d.jpg', mask, id);
-                    image = image_enhancement2(image, e, k0, k1, k2, mask);
+                    disp(imageName);
                     % write to csv file.
                     dlmwrite (fileName, data, '-append');
                     % write image to folder
