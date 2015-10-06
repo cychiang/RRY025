@@ -31,7 +31,7 @@ global_variance = std2(image);
 % For loop to generate results.
 % mask size
 tic
-for mask_size = 3:2:9
+for mask_size = 7:2:9
     % Initial csv file string.
     fileName = sprintf('reports/mask_%d.csv', mask_size);
     mask = [mask_size mask_size];
