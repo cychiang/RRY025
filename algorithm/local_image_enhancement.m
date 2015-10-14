@@ -1,8 +1,9 @@
 function out_image = local_image_enhancement(input_image, ...
     global_mean, global_variance, enhancement_constant, k)
-    % trans 2D into 1D
+    % cause the input_image we got is 1-D array so
+    % this line is inorder to get the center pixel in the array.
     center = floor((size(input_image,1)+1)/2);
-    % cause we only care about the central part of mask.
+    % cause we only change the central value of the mask.
     out_image = input_image(center,:);
     % calculate local mean and local variance.
     local_mean = mean(input_image);
